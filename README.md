@@ -152,7 +152,9 @@ M --> N[Final Answer]
 
 ## 1️⃣ Upload PDF
 
-![Upload PDF](assets/AegisRAG_1_Home_Upload_PDF.png)
+<p align="center">
+  <img src="AegisRAG_1_Home_Upload_PDF.png" width="850">
+</p>
 
 Upload research papers, reports, manuals, or any PDF document for semantic analysis.
 
@@ -160,7 +162,9 @@ Upload research papers, reports, manuals, or any PDF document for semantic analy
 
 ## 2️⃣ Ask Questions
 
-![Ask Question](assets/AegisRAG_2_Ask_Question.png)
+<p align="center">
+  <img src="AegisRAG_2_Ask_Question.png" width="850">
+</p>
 
 Ask questions directly from uploaded documents using natural language.
 
@@ -168,7 +172,9 @@ Ask questions directly from uploaded documents using natural language.
 
 ## 3️⃣ Query Classification
 
-![Query Classification](assets/AegisRAG_3_Query_Classification.png)
+<p align="center">
+  <img src="AegisRAG_3_Query_Classification.png" width="850">
+</p>
 
 The system automatically determines the query category and selects the appropriate retrieval strategy.
 
@@ -176,7 +182,9 @@ The system automatically determines the query category and selects the appropria
 
 ## 4️⃣ Retrieved Context
 
-![Retrieved Context](assets/AegisRAG_4_Retrieved_Context.png)
+<p align="center">
+  <img src="AegisRAG_4_Retrieved_Context.png" width="850">
+</p>
 
 Displays the most relevant chunks retrieved from the document along with similarity scores.
 
@@ -184,7 +192,9 @@ Displays the most relevant chunks retrieved from the document along with similar
 
 ## 5️⃣ Generated Answer
 
-![Generated Answer](assets/AegisRAG_5_Generated_Answer.png)
+<p align="center">
+  <img src="AegisRAG_5_Generated_Answer.png" width="850">
+</p>
 
 Generates grounded answers using retrieved contextual information.
 
@@ -192,7 +202,9 @@ Generates grounded answers using retrieved contextual information.
 
 ## 6️⃣ Chat History
 
-![Chat History](assets/AegisRAG_6_Chat_History.png)
+<p align="center">
+  <img src="AegisRAG_6_Chat_History.png" width="850">
+</p>
 
 Track previous queries, retrieval details, and generated responses.
 
