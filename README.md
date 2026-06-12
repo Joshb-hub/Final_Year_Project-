@@ -37,7 +37,7 @@ The system leverages:
 
 ## 🌐 Live Demo
 
-🔗 **Deployment:** YOUR_DEPLOYMENT_LINK
+🔗 **Deployment:** [AegisRAG Live Demo](https://huggingface.co/spaces/ArunabhoCodes/AegisRAG)
 
 Upload a PDF and ask questions in natural language to receive context-aware responses.
 
