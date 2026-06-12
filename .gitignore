@@ -17,7 +17,6 @@ env/
 
 # Local data & database files
 *.pdf
-*.txt
 *.db
 faiss_index/
 data/
