@@ -10,7 +10,7 @@
 [![Dynamic RAG](https://img.shields.io/badge/RAG-Dynamic-purple?style=for-the-badge)]()
 [![LLM Powered](https://img.shields.io/badge/LLM-Powered-orange?style=for-the-badge)]()
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit-success?style=for-the-badge)](YOUR_DEPLOYMENT_LINK)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit-success?style=for-the-badge)](https://huggingface.co/spaces/ArunabhoCodes/AegisRAG)
 
 ### Intelligent PDF Question Answering using Dynamic Retrieval-Augmented Generation
 
