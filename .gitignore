@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# API keys and secrets
+.env
+*.env
+
+# Python caching
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local data & database files
+*.pdf
+*.txt
+*.db
+faiss_index/
+data/
+
+# OS specific files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AegisRAG — Dynamic PDF Question Answering</title>
+    <meta name="description" content="Intelligent PDF Question Answering using Dynamic Retrieval-Augmented Generation with Gemini AI." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app-container">
+
+      <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4L6 12V24C6 34.5 14.1 44.2 24 47C33.9 44.2 42 34.5 42 24V12L24 4Z" fill="url(#shield-grad)" />
+              <rect x="16" y="19" width="4" height="10" rx="2" fill="white" opacity="0.9"/>
+              <rect x="22" y="15" width="4" height="14" rx="2" fill="white" opacity="0.9"/>
+              <rect x="28" y="22" width="4" height="7" rx="2" fill="white" opacity="0.9"/>
+              <defs>
+                <linearGradient id="shield-grad" x1="6" y1="4" x2="42" y2="47" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#a78bfa"/>
+                  <stop offset="1" stop-color="#6d28d9"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">AegisRAG</span>
+            <span class="logo-sub">Dynamic RAG with Agents</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="nav-item active" id="nav-home" data-target="home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Home
+            </li>
+            <li class="nav-item" id="nav-upload" data-target="upload">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Upload PDF
+            </li>
+            <li class="nav-item" id="nav-ask" data-target="ask">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Ask Question
+            </li>
+            <li class="nav-item" id="nav-history" data-target="history">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4"/><polyline points="3 3 3 7 7 7"/></svg>
+              History
+            </li>
+            <li class="nav-item" id="nav-settings" data-target="settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Settings
+            </li>
+            <li class="nav-item" id="nav-about" data-target="about">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              About
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="system-status">
+            <span class="status-label">System Status</span>
+            <div class="status-row">
+              <span class="status-dot"></span>
+              <span class="status-text" id="status-text">Active</span>
+            </div>
+          </div>
+          <button class="reset-btn" id="reset-button" title="Reset session">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reset Session
+          </button>
+        </div>
+      </aside>
+
+      <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+      <main class="main-content">
+
+        <!-- STEP 1 · Home / Upload PDF -->
+        <section class="step-section" id="section-home">
+          <div class="step-badge">1. Home / Upload PDF</div>
+          <div class="content-card">
+            <div class="card-hero">
+              <h1>Welcome to <span class="accent">AegisRAG</span></h1>
+              <p class="card-subtitle">Intelligent PDF Question Answering using Dynamic Retrieval-Augmented Generation</p>
+            </div>
+
+            <div class="dropzone" id="dropzone">
+              <svg class="drop-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#ede9fe" />
+                <path d="M32 44V28M32 28L26 34M32 28L38 34" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M22 40c-4 0-7-3-7-7s3-7 7-7c.5-4.5 4.3-8 9-8 5.2 0 9 4.1 9 9h1c3.3 0 6 2.7 6 6s-2.7 6-6 6" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <p class="drop-title">Drag &amp; Drop your PDF file here</p>
+              <p class="drop-or">or</p>
+              <button class="btn-browse" id="browse-btn">Browse Files</button>
+              <input type="file" id="pdf-input" accept="application/pdf" multiple hidden />
+            </div>
+
+            <div id="pdf-list" class="pdf-list"></div>
+
+            <div id="upload-info" class="info-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>Upload a PDF document to get started with intelligent question answering.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2 · Ask Question -->
+        <section class="step-section" id="section-ask">
+          <div class="step-badge">2. Ask Question</div>
+          <div class="content-card">
+            <h2>Ask a Question</h2>
+            <p class="card-subtitle">Enter your question related to the uploaded PDF.</p>
+
+            <div class="selected-doc-label">Selected Document</div>
+            <div id="selected-doc" class="selected-doc-card">
+              <div class="pdf-icon-sm">PDF</div>
+              <div class="selected-doc-info">
+                <span id="selected-doc-name">No document uploaded</span>
+                <span id="selected-doc-size" class="doc-size"></span>
+              </div>
+              <div id="selected-doc-check" class="doc-check hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+
+            <div class="ask-mode-row">
+              <span class="ask-mode-label">Response Mode:</span>
+              <span class="ask-mode-badge" id="ask-mode-badge">Precise</span>
+              <span class="ask-mode-hint" id="ask-mode-hint">Concise, summarized answers from PDF context</span>
+            </div>
+
+            <label class="field-label" for="question-input">Enter your question</label>
+            <div class="textarea-wrap">
+              <textarea id="question-input" maxlength="500" rows="4" placeholder="What is the main objective of this research?"></textarea>
+              <span class="char-count"><span id="char-count">0</span> / 500</span>
+            </div>
+
+            <button class="btn-primary full-width" id="ask-btn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Get Answer
+            </button>
+
+            <div class="info-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              <span>Query will be classified and relevant context will be retrieved dynamically to generate the best answer.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3 · Query Classification -->
+        <section class="step-section hidden" id="section-classification">
+          <div class="step-badge">3. Query Classification</div>
+          <div class="content-card">
+            <h2>Query Classification Result</h2>
+            <p class="card-subtitle">Your query has been analyzed and classified.</p>
+
+            <div class="classification-card">
+              <div class="query-type-row">
+                <div class="bot-avatar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+                </div>
+                <div class="query-type-info">
+                  <span class="qt-label">Query Type Detected</span>
+                  <span class="qt-value" id="query-type-text">Factual</span>
+                </div>
+              </div>
+              <div class="confidence-section">
+                <div class="confidence-bar-track">
+                  <div class="confidence-bar-fill" id="confidence-bar" style="width:0%"></div>
+                </div>
+                <span class="confidence-score-label">Confidence Score: <strong id="confidence-score">—</strong></span>
+              </div>
+            </div>
+
+            <div class="strategy-card">
+              <div class="strategy-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+              </div>
+              <div class="strategy-info">
+                <strong>Retrieval Strategy</strong>
+                <div class="strategy-grid">
+                  <span>Top-K Chunks:</span><span id="strategy-topk">—</span>
+                  <span>Search Type:</span><span id="strategy-type">—</span>
+                  <span>Focus:</span><span id="strategy-focus">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>The system will retrieve the most relevant chunks based on the identified query type.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 4 · Retrieved Context -->
+        <section class="step-section hidden" id="section-context">
+          <div class="step-badge">4. Retrieved Context</div>
+          <div class="content-card">
+            <div class="context-header-row">
+              <div>
+                <h2>Retrieved Context</h2>
+                <p class="card-subtitle">Top relevant information from the document.</p>
+              </div>
+              <span class="chunks-badge" id="chunks-badge">0 Chunks Retrieved</span>
+            </div>
+            <div id="chunks-list" class="chunks-list"></div>
+            <div class="info-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>These context chunks will be used to generate the final answer.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 5 · Generated Answer -->
+        <section class="step-section hidden" id="section-answer">
+          <div class="step-badge">5. Generated Answer</div>
+          <div class="content-card">
+            <h2>Generated Answer</h2>
+            <p class="card-subtitle">AI-generated response based on retrieved context.</p>
+            <div class="answer-box">
+              <div class="answer-bot-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+              </div>
+              <div id="answer-text" class="answer-text"></div>
+            </div>
+            <div class="answer-actions">
+              <button class="btn-secondary" id="new-question-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Ask Another Question
+              </button>
+              <button class="btn-ghost" id="copy-answer-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy Answer
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="step-section hidden" id="section-settings">
+          <div class="step-badge">⚙ Settings</div>
+          <div class="content-card">
+            <h2>Response Mode</h2>
+            <p class="card-subtitle">Choose how AegisRAG should generate answers for your questions.</p>
+
+            <div class="mode-grid">
+
+              <!-- Precise -->
+              <div class="mode-card active" id="mode-precise" data-mode="precise">
+                <div class="mode-card-header">
+                  <div class="mode-icon mode-icon-precise">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  </div>
+                  <div class="mode-card-title-wrap">
+                    <span class="mode-name">Precise</span>
+                    <span class="mode-default-badge">Default</span>
+                  </div>
+                  <div class="mode-check" id="check-precise">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+                <p class="mode-desc">Gives a concise, summarised answer strictly from the most relevant context retrieved from the PDF. Best for quick, accurate lookups.</p>
+                <div class="mode-tags">
+                  <span class="mode-tag">📄 PDF Context</span>
+                  <span class="mode-tag">⚡ Fast</span>
+                  <span class="mode-tag">🎯 Focused</span>
+                </div>
+              </div>
+
+              <!-- Point-Wise -->
+              <div class="mode-card" id="mode-pointwise" data-mode="pointwise">
+                <div class="mode-card-header">
+                  <div class="mode-icon mode-icon-pointwise">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                  </div>
+                  <div class="mode-card-title-wrap">
+                    <span class="mode-name">Point-Wise</span>
+                  </div>
+                  <div class="mode-check hidden" id="check-pointwise">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+                <p class="mode-desc">Covers every occurrence of the topic across the entire PDF in a structured, numbered point-wise list. Best for comprehensive extraction.</p>
+                <div class="mode-tags">
+                  <span class="mode-tag">📄 PDF Context</span>
+                  <span class="mode-tag">📋 Bullet Points</span>
+                  <span class="mode-tag">🔍 All Occurrences</span>
+                </div>
+              </div>
+
+              <!-- Detailed -->
+              <div class="mode-card" id="mode-detailed" data-mode="detailed">
+                <div class="mode-card-header">
+                  <div class="mode-icon mode-icon-detailed">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  </div>
+                  <div class="mode-card-title-wrap">
+                    <span class="mode-name">Detailed</span>
+                    <span class="mode-power-badge">Enhanced</span>
+                  </div>
+                  <div class="mode-check hidden" id="check-detailed">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+                <p class="mode-desc">Combines PDF context with Gemini's own knowledge base for a thorough, in-depth explanation with examples, background, and additional insights.</p>
+                <div class="mode-tags">
+                  <span class="mode-tag">📄 PDF Context</span>
+                  <span class="mode-tag">🧠 AI Knowledge</span>
+                  <span class="mode-tag">📚 Deep Dive</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="mode-active-info" id="mode-active-info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="mode-active-text">Precise mode active — answers will be concise and directly from the PDF.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 6 · Chat History -->
+        <section class="step-section hidden" id="section-history">
+          <div class="step-badge">6. Chat History</div>
+          <div class="content-card">
+            <h2>Chat History</h2>
+            <p class="card-subtitle">View your previous queries and answers.</p>
+
+            <div id="history-list" class="history-list"></div>
+
+            <div id="history-empty" class="history-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4"/><polyline points="3 3 3 7 7 7"/></svg>
+              <p>No history yet.</p>
+              <span>Ask a question to see your chat history here.</span>
+            </div>
+
+            <div class="history-footer">
+              <button class="btn-clear-history" id="clear-history-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                Clear History
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- History detail modal -->
+        <div id="history-modal" class="history-modal hidden">
+          <div class="history-modal-backdrop" id="modal-backdrop"></div>
+          <div class="history-modal-card">
+            <div class="history-modal-header">
+              <div class="history-modal-type-row">
+                <span class="history-modal-type-badge" id="modal-type-badge">Factual</span>
+                <span class="history-modal-chunks" id="modal-chunks">4 chunks</span>
+              </div>
+              <button class="history-modal-close" id="modal-close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="history-modal-question-label">Question</div>
+            <div class="history-modal-question" id="modal-question"></div>
+            <div class="history-modal-answer-label">Answer</div>
+            <div class="history-modal-answer" id="modal-answer"></div>
+            <div class="history-modal-footer">
+              <span class="history-modal-timestamp" id="modal-timestamp"></span>
+              <div class="history-modal-actions">
+                <button class="btn-ghost" id="modal-copy-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  Copy Answer
+                </button>
+                <button class="btn-primary" id="modal-reask-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Ask Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+          <div class="loading-card">
+            <div class="spinner"></div>
+            <span id="loading-message">Processing...</span>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <script src="/static/app.js" type="module"></script>
+  </body>
+</html>
